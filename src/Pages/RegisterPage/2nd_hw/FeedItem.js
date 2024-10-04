@@ -1,35 +1,39 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const FeedItem = ({ title, subtitle, date, comments, nick, heartCount, onHeartClick }) => {
   const [isHearted, setIsHearted] = useState(false);
 
-  const handleHeartClick = () => {
-    setIsHearted(!isHearted); // 하트 상태 반전
-    onHeartClick(isHearted); // 부모에게 상태 전달
+  const handleHeartClick = (event) => {
+    event.stopPropagation(); 
+    setIsHearted(!isHearted);
+    onHeartClick(isHearted);
   };
 
   return (
     <Post>
-      <Upper />
-      <Title>{title}</Title>
-      <Subtitle>{subtitle}</Subtitle>
-      <Smallcontainer>
-        <Date>{date}</Date>
-        <Comment>{comments}</Comment>
-      </Smallcontainer>
-      <Hr />
-      <Bottomcontainer>
-        <Profile1 src='./Profile.png' alt='Profile' />
-        <By>by</By>
-        <Nick>{nick}</Nick>
-        <Heart 
-          src={isHearted ? './redheart.png' : './blackheart.png'} 
-          onClick={handleHeartClick} 
-          alt='Heart' 
-        />
-        <Count>{heartCount}</Count>
-      </Bottomcontainer>
+      <Link to="/detail" style={{ textDecoration: 'none', color: 'inherit' }}> {/* Link로 감싸기 */}
+        <Upper />
+        <Title>{title}</Title>
+        <Subtitle>{subtitle}</Subtitle>
+        <Smallcontainer>
+          <Date>{date}</Date>
+          <Comment>{comments}</Comment>
+        </Smallcontainer>
+        <Hr />
+        <Bottomcontainer>
+          <Profile1 src='./Profile.png' alt='Profile' />
+          <By>by</By>
+          <Nick>{nick}</Nick>
+          <Heart 
+            src={isHearted ? './redheart.png' : './blackheart.png'} 
+            onClick={handleHeartClick} 
+            alt='Heart' 
+          />
+          <Count>{heartCount}</Count>
+        </Bottomcontainer>
+      </Link>
     </Post>
   );
 };

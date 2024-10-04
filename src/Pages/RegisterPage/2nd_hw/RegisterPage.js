@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useState } from "react"; 
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // useNavigate 추가
 
 function RegisterPage() {
+  const navigate = useNavigate(); // nav로 페이지 간 이동 구현(link말고 다른 걸로 구현해보고 싶어서)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [introduction, setIntroduction] = useState("");
+  const [checkBox, setCheckBox] = useState(false);
+  const [focusedField, setFocusedField] = useState(""); // 포커스된 필드를 저장하는 상태
+
+  // 유효성 검사 함수
+  const validateForm = () => {
+    if (!name || !email || !password || !introduction || !checkBox) {
+      alert("모든 필드를 입력해주세요."); 
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {  // test 메서드 새로 알게 됨.
+      alert("유효한 이메일 주소를 입력해주세요.");
+      return false;
+    }    
+    return true;  // 유효성 통과 시 true 리턴
+  };
+
+  const handleRegister = () => {  
+    if (validateForm()) {     // 등록 성공 후 FeedPage로 이동
+      navigate("/feed"); // feedpage로 이동
+    }
+  };
+
   return (
     <BaseContainer>
       <Container>
@@ -9,33 +37,71 @@ function RegisterPage() {
         <RegisterStc>기본 회원 정보를 등록해주세요</RegisterStc>
 
         <ItemBox>
-          <Label color="#15B886">이름</Label>
-          <Input type="text" placeholder="이름을 입력해주세요." width="249px" color="#15B886" />
+          <Label focused={focusedField === "name"}>이름</Label>
+          <Input 
+            name="name"     // 인풋에 이름 추가
+            type="text" 
+            placeholder="이름을 입력해주세요." 
+            width="249px" 
+            color="#15B886" 
+            value={name}  // name이랑 입력값 동기화
+            onChange={(event) => setName(event.target.value)}  // 변경사항 발생 시 setName으로 입력값과 name값 동기화
+            onFocus={() => setFocusedField("name")} // 포커스 시 상태 변경
+            onFocusOut={() => setFocusedField("")} // 포커스 아웃 시 상태 초기화
+          />
         </ItemBox>
 
         <ItemBox>
-          <Label>이메일</Label>
-          <Input type="email" placeholder="이메일을 입력해주세요." width="333px" />
+          <Label focused={focusedField === "email"}>이메일</Label>
+          <Input 
+            name="email"
+            type="email" 
+            placeholder="이메일을 입력해주세요." 
+            width="333px" 
+            value={email} 
+            onChange={(event) => setEmail(event.target.value)} 
+            onFocus={() => setFocusedField("email")} // 포커스 시 상태 변경
+            onFocusOut={() => setFocusedField("")} // 포커스 아웃 시 상태 초기화
+          />
         </ItemBox>
 
         <ItemBox>
-          <Label>비밀번호</Label>
-          <Input type="password" placeholder="비밀번호를 입력해주세요." width="274px" />
+          <Label focused={focusedField === "password"}>비밀번호</Label>
+          <Input 
+            name="password"
+            type="password" 
+            placeholder="비밀번호를 입력해주세요." 
+            width="274px" 
+            value={password} 
+            onChange={(event) => setPassword(event.target.value)} 
+            onFocus={() => setFocusedField("password")} // 포커스 시 상태 변경
+            onFocusOut={() => setFocusedField("")} // 포커스 아웃 시 상태 초기화
+          />
         </ItemBox>
 
         <ItemBox>
-          <Label>한 줄 소개</Label>
-          <Input type="text" placeholder="당신을 한 줄로 소개해보세요" width="373px" />
+          <Label focused={focusedField === "introduction"}>한 줄 소개</Label>
+          <Input 
+            name="introduction"
+            type="text" 
+            placeholder="당신을 한 줄로 소개해보세요" 
+            width="373px" 
+            value={introduction} 
+            onChange={(event) => setIntroduction(event.target.value)} 
+            onFocus={() => setFocusedField("introduction")} // 포커스 시 상태 변경
+            onFocusOut={() => setFocusedField("")} // 포커스 아웃 시 상태 초기화
+          />
         </ItemBox>
 
         <Stc>
-          <input type='checkbox' className='CheckBox' />
-          <Url href='#'>이용약관</Url>과 <Url href='#'>개인정보취급방침</Url>에 동의합니다.
+          <CheckBox type='checkbox' checked={checkBox} onChange={() => setCheckBox(!checkBox)}/> 
+          <Url href='#' target="_blank" rel="noopener noreferrer">이용약관</Url>과 
+          <Url href='#' target="_blank" rel="noopener noreferrer">개인정보취급방침</Url>에 동의합니다.  {/* 새 창에서 열기 추가 */}
         </Stc>
 
         <ButtonsBox>
-          <Btn1>취소</Btn1>
-          <Btn2>가입</Btn2>
+          <Btn1 onClick={() => alert("취소되었습니다.")}>취소</Btn1> 
+          <Btn2 onClick={handleRegister}>가입</Btn2> 
         </ButtonsBox>
       </Container>
     </BaseContainer>
@@ -90,20 +156,20 @@ const Label = styled.p`
   font-size: 15px;
   font-weight: 700;
   text-align: left;
-  color: ${(props) => props.color || "#ACB5BD"}; // color prop을 사용
+  color: ${(props) => (props.focused ? "#15B886" : "#ACB5BD")}; // 포커스 여부에 따라 색상 변경
 `;
 
 const Input = styled.input`
   width: ${(props) => props.width};
   height: 33.5px;
   border: none;
-  border-bottom: 1px solid ${(props) => props.color || "#ACB5BD"}; // color prop을 사용;
+  border-bottom: 1px solid #ACB5BD;
   outline: none;
   font-family: Inter;
   font-size: 19px;
   font-weight: 400;
   line-height: 22.99px;
-  color: ${(props) => props.color || "#ACB5BD"}; // color prop을 사용
+  color: #ACB5BD;
 
   &::placeholder {
     color: #ACB5BD;
@@ -112,6 +178,11 @@ const Input = styled.input`
     font-family: Inter;
     font-size: 19px;
     line-height: 22.99px;
+  }
+
+  &:focus {
+    border-bottom: 1px solid #15B886; // 포커스 되었을 때 아래 테두리 색상 (녹색)
+    color: #15B886; 
   }
 `;
 
@@ -166,4 +237,9 @@ const Btn2 = styled.div`
   color: #fff;
 `;
 
-export default RegisterPage;
+const CheckBox = styled.input`
+  width: 15px;
+  height: 15px;
+`;
+
+export default RegisterPage; // 사용하기 위한 export

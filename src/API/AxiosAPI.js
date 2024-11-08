@@ -6,9 +6,14 @@ const server = process.env.REACT_APP_API_URL;
 // 템플릿 리터럴 (``) 을 이용해서 표현식을 잘 다룰 수 있도록 해봅시다.
 
 export const getMembersAPI = async (part) => {
+    //my code
     try {
-        //your code here
-
+        const response = await axios.get(`${server}/user?part=${part}`);
+         // axios를 사용하여 '/data.json' 엔드 포인트에서 데이터를 가져옵니다.
+         // 팹틱으로 주소에 대해 하드코딩할 필요가 없습니다.
+        console.log("API Response:", response); // 응답 확인용
+        return response.data;
+        //data는 users객체
     } catch (error) {
         console.error("Error fetching(part) user data:", error);
         throw error;
@@ -17,9 +22,11 @@ export const getMembersAPI = async (part) => {
 
 
 export const postMemberAPI = async (data) => {
+    //my code
     try {
-        //your code here
-
+        const response = await axios.post(`${server}/user`, data); 
+        // post는 서버에 전달할 업로드할 데이터가 필요합니다.
+        return response;
     } catch (error) {
         console.error("Error updating user data:", error);
         throw error;

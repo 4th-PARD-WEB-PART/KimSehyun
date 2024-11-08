@@ -8,7 +8,7 @@
 const response = await getMembersAPI(part);
 setMembers(response);
  } 
- // 가져온 데이터로 멤버 상태를 업데이트합니다.</pre>
+ // 가져온 데이터로 멤버 상태를 업데이트합니다. </pre>
 
 <h3>2. handlePostData 함수</h3>
 <p>이 함수는 새로운 멤버 데이터를 추가하는 POST의 역할을 합니다. <br/>

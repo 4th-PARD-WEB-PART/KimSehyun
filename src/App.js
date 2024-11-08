@@ -36,7 +36,7 @@ function App() {
     }
   };
 
-  // 간단한 유효성 검사 함수
+  // 간단한 유효성 검사 함수.
   const handleCheckInvalid = (data) => {
     return data.name && data.part; // 이름과 파트가 모두 입력되었는지 확인
   };

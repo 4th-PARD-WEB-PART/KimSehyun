@@ -17,7 +17,7 @@ export const getMembersAPI = async (part) => {
     } catch (error) {
         console.error("Error fetching(part) user data:", error);
         throw error;
-    }
+    } 
 };
 
 
